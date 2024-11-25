@@ -1,7 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
-import userRoute from './routes/userRoute.js'
+import cookieParser from 'cookie-parser';
+import userRoutes from "./routes/userRoute.js";
+import authRoutes from "./routes/authRoute.js";
+import tweetRoutes from "./routes/tweetRoute.js";
 
 const app = express();
 dotenv.config();
@@ -19,11 +22,16 @@ const connect = () => {
 };
 
 
-app.listen(8000, () => {
-    connect()
-    console.log('Server is running on port 8000');
-});
+app.use(cookieParser());
+app.use(express.json());
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/tweets", tweetRoutes);
 
+app.listen(8000, () => {
+  connect();
+  console.log("Listening to port 8000");
+});
 
 
 

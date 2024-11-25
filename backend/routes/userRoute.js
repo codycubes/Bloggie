@@ -5,7 +5,7 @@ import {
   deleteUser,
   follow,
   unFollow,
-} from "../controllers/user.js";
+} from "../controllers/userController.js";
 
 import { verifyToken } from "../verifyToken.js";
 
