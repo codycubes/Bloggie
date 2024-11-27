@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
       unique: true,
@@ -20,33 +21,50 @@ const UserSchema = new mongoose.Schema(
      },
 
 
-    profileProfile: { 
-        type: String 
-    },
 
 
-    followers: { 
-        type: Array, 
-        defaultValue: [] },
+    // profileProfile: { 
+    //     type: String 
+    // },
 
 
-    following: { 
-        type: Array, 
-        defaultValue: [] },
+    // followers: { 
+    //     type: Array, 
+    //     defaultValue: [] },
 
 
-    description: { 
-        type: String 
-    },
+    // following: { 
+    //     type: Array, 
+    //     defaultValue: [] },
 
 
-    profilePicture: { 
+    // description: { 
+    //     type: String 
+    // },
 
-        type: String },
+
+    // profilePicture: { 
+
+    //     type: String },
   },
 
   
   { timestamps: true }
 );
+
+
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  };
+  
+  
+  UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
+      next();
+    }
+  
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  });
 
 export default mongoose.model("User", UserSchema);

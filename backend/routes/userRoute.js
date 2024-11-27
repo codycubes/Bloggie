@@ -1,29 +1,18 @@
-import express from "express";
+import express from 'express';
 import {
-  getUser,
-  update,
-  deleteUser,
-  follow,
-  unFollow,
-} from "../controllers/userController.js";
-
-import { verifyToken } from "../verifyToken.js";
+  authUser,
+  registerUser,
+  logoutUser,
+  getUserProfile,
+  updateUserProfile,
+} from '../controllers/userController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Update User
-router.put("/:id", verifyToken, update);
-
-// Get User
-router.get("/find/:id", getUser);
-
-// Delete User
-router.delete("/:id", verifyToken, deleteUser);
-
-// Follow
-router.put("/follow/:id", verifyToken, follow);
-
-// Unfollow
-router.put("/unfollow/:id", verifyToken, unFollow);
+router.post('/', registerUser);
+router.post('/auth', authUser);
+router.post('/logout', logoutUser);
+router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
 
 export default router;
