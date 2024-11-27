@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation } from '../slices/usersApiSlice';
 
 interface User {
   _id: string;
@@ -8,26 +9,34 @@ interface User {
 
 const AdminPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'AllUsers' | 'AllPosts'>('AllUsers');
-  const [users, setUsers] = useState<User[]>([]);
+  const { data: users = [], error, isLoading } = useAllUsersQuery();
+  const [updateUser] = useUpdateUserMutation();
+  const [deleteUser] = useDeleteUserMutation();
 
-  useEffect(() => {
-    const fetchUsers = async () => {
+  const handleUpdate = async (user: User) => {
+    const updatedName = prompt('Enter new name:', user.name);
+    if (updatedName) {
       try {
-        const response = await fetch('/api/users/allusers');
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
-        }
-        const data = await response.json();
-        setUsers(data);
-      } catch (error) {
-        console.error(error.message);
+        await updateUser({ _id: user._id, name: updatedName }).unwrap();
+        alert('User updated successfully');
+      } catch (err) {
+        console.error('Failed to update user', err);
+        alert('Failed to update user');
       }
-    };
-
-    if (activeTab === 'AllUsers') {
-      fetchUsers();
     }
-  }, [activeTab]);
+  };
+
+  const handleDelete = async (id: string) => {
+    if (window.confirm('Are you sure you want to delete this user?')) {
+      try {
+        await deleteUser(id).unwrap();
+        alert('User deleted successfully');
+      } catch (err) {
+        console.error('Failed to delete user', err);
+        alert('Failed to delete user');
+      }
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -35,25 +44,42 @@ const AdminPage: React.FC = () => {
         return (
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-xl font-bold mb-4">All Users</h2>
-            {users.length > 0 ? (
-              <ul className="space-y-2">
-                {users.map((user) => (
-                  <li
-                    key={user._id}
-                    className="p-2 border rounded flex items-center justify-between"
-                  >
-                    <div>
-                      <h3 className="font-medium">{user.name}</h3>
-                      <p className="text-sm text-gray-500">{user.email}</p>
-                    </div>
-                    <button className="bg-blue-500 text-white px-3 py-1 rounded">
-                      View
-                    </button>
-                  </li>
-                ))}
-              </ul>
+            {isLoading ? (
+              <p>Loading...</p>
+            ) : error ? (
+              <p>Failed to fetch users</p>
             ) : (
-              <p>No users found.</p>
+              users.length > 0 ? (
+                <ul className="space-y-2">
+                  {users.map((user) => (
+                    <li
+                      key={user._id}
+                      className="p-2 border rounded flex items-center justify-between"
+                    >
+                      <div>
+                        <h3 className="font-medium">{user.name}</h3>
+                        <p className="text-sm text-gray-500">{user.email}</p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <button
+                          className="bg-yellow-500 text-white px-3 py-1 rounded"
+                          onClick={() => handleUpdate(user)}
+                        >
+                          Update
+                        </button>
+                        <button
+                          className="bg-red-500 text-white px-3 py-1 rounded"
+                          onClick={() => handleDelete(user._id)}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>No users found.</p>
+              )
             )}
           </div>
         );

@@ -25,16 +25,16 @@ const Login: React.FC = () => {
 
   const { userInfo } = useSelector((state: RootState) => state.auth);
 
-  useEffect(() => {
-    if (userInfo) {
-      const isAdmin = userInfo.email.endsWith('@admin.com');
-      if (isAdmin) {
-        navigate('/admin');
-      } else {
-        navigate('/');
-      }
-    }
-  }, [navigate, userInfo]);
+  // useEffect(() => {
+  //   if (userInfo) {
+  //     const isAdmin = userInfo.email.endsWith('@admin.com');
+  //     if (isAdmin) {
+  //       navigate('/admin');
+  //     } else {
+  //       navigate('/');
+  //     }
+  //   }
+  // }, [navigate, userInfo]);
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();

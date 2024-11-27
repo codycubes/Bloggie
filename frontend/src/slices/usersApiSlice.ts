@@ -2,6 +2,11 @@ import { apiSlice } from './apiSlice';
 
 const USERS_URL = '/api/users';
 
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+}
 
 interface LoginRequest {
   email: string;
@@ -15,17 +20,10 @@ interface RegisterRequest {
 }
 
 interface UpdateUserRequest {
+  _id: string; // Add _id to identify the user
   name?: string;
   email?: string;
   password?: string;
-
-}
-
-interface AllUserRequest {
-  name?: string;
-  email?: string;
-  password?: string;
-
 }
 
 interface UserResponse {
@@ -33,7 +31,6 @@ interface UserResponse {
   name: string;
   email: string;
   token: string;
-
 }
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -58,21 +55,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-
-    allusers: builder.mutation<UserResponse, AllUserRequest>({
+    allUsers: builder.query<User[], void>({
+      query: () => `${USERS_URL}/allusers`,
+    }),
+    updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
       query: (data) => ({
-        url: `${USERS_URL}/allusers`,
-        method: 'GET',
+        url: `${USERS_URL}/${data._id}`,
+        method: 'PUT',
         body: data,
       }),
     }),
-
-
-    updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
-      query: (data) => ({
-        url: `${USERS_URL}/profile`,
-        method: 'PUT',
-        body: data,
+    deleteUser: builder.mutation<void, string>({
+      query: (id) => ({
+        url: `${USERS_URL}/${id}`,
+        method: 'DELETE',
       }),
     }),
   }),
@@ -82,5 +78,7 @@ export const {
   useLoginMutation,
   useLogoutMutation,
   useRegisterMutation,
+  useAllUsersQuery,
   useUpdateUserMutation,
+  useDeleteUserMutation,
 } = userApiSlice;
