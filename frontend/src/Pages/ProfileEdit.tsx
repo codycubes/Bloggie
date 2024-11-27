@@ -64,9 +64,9 @@ const ProfileEdit: React.FC = () => {
 
       {/* Form */}
       <form className="space-y-6" onSubmit={submitHandler}>
-        {/* Username */}
+        {/* name */}
         <div>
-          <label className="block text-sm font-bold" htmlFor="username">
+          <label className="block text-sm font-bold" htmlFor="name">
             Name
           </label>
           <input

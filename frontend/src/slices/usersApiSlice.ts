@@ -21,6 +21,13 @@ interface UpdateUserRequest {
 
 }
 
+interface AllUserRequest {
+  name?: string;
+  email?: string;
+  password?: string;
+
+}
+
 interface UserResponse {
   id: string;
   name: string;
@@ -51,6 +58,16 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+
+    allusers: builder.mutation<UserResponse, AllUserRequest>({
+      query: (data) => ({
+        url: `${USERS_URL}/allusers`,
+        method: 'GET',
+        body: data,
+      }),
+    }),
+
+
     updateUser: builder.mutation<UserResponse, UpdateUserRequest>({
       query: (data) => ({
         url: `${USERS_URL}/profile`,

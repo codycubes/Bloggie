@@ -1,17 +1,14 @@
 import { Route, Routes } from 'react-router-dom';
-// import LandingPage from './Pages/LandingPage';
 import Login from './Pages/Login';
 import Registration from './Pages/Register';
 import Navbar from './Components/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import ProfileEdit from './Pages/ProfileEdit';
-import PrivateRoute from './Components/PrivateRoute';
-// import ViewPodcast from './Pages/ViewPodcast';
-// import CreatePodcast from './Pages/CreatePodcast';
 import Homepage from './Pages/Homepage';
 import ProfileEdit from './Pages/ProfileEdit';
-
+import PrivateRoute from './Components/PrivateRoute';
+import AdminRoute from './Components/AdminRoute';
+import AdminPage from './Pages/AdminPage';
 
 const App: React.FC = () => {
   return (
@@ -22,14 +19,21 @@ const App: React.FC = () => {
         <Route path="/" element={<Homepage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
-        {/* <Route path="/podcast/:_id" element={<ViewPodcast />}/> */}
-        {/* <Route path='/createpodcast' element={<CreatePodcast />}/> */}
         <Route
           path="/profile"
           element={
             <PrivateRoute>
               <ProfileEdit />
             </PrivateRoute>
+          }
+        />
+        {/* Admin Routes */}
+        <Route
+          path="/admin"
+          element={
+            <AdminRoute>
+              <AdminPage />
+            </AdminRoute>
           }
         />
       </Routes>

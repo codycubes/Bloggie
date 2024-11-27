@@ -4,14 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
-import { RootState, AppDispatch } from '../store'; 
+import { RootState, AppDispatch } from '../store';
 // import Loader from '../Components/Loader';
+
 interface LoginResponse {
   id: string;
   name: string;
   email: string;
   token: string;
-
 }
 
 const Login: React.FC = () => {
@@ -27,7 +27,12 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (userInfo) {
-      navigate('/');
+      const isAdmin = userInfo.email.endsWith('@admin.com');
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     }
   }, [navigate, userInfo]);
 
@@ -36,10 +41,15 @@ const Login: React.FC = () => {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
-      navigate('/');
+      const isAdmin = res.email.endsWith('@admin.com');
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (err: any) {
       toast.error(err?.data?.message || err.error);
-    // console.log(err?.data?.message || err.error)
+      // console.log(err?.data?.message || err.error)
     }
   };
 
@@ -48,7 +58,7 @@ const Login: React.FC = () => {
       <div className="w-full max-w-md p-8 space-y-6 rounded-lg mt-20 shadow-lg">
         <h2 className="text-7xl font-black text-center">Login To Podify</h2>
         <form className="space-y-6" onSubmit={handleLogin}>
-          <div> 
+          <div>
             <label htmlFor="email" className="block text-sm font-bold">Email address</label>
             <input
               id="email"
@@ -73,8 +83,7 @@ const Login: React.FC = () => {
             />
           </div>
           <div>
-{ isLoading && <h2>Loading</h2>}
-
+            {isLoading && <h2>Loading</h2>}
             <button
               type="submit"
               className="flex justify-center w-full px-4 mb-8 py-2 font-bold text-white bg-red-700 border border-transparent rounded-full shadow-sm hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -82,7 +91,7 @@ const Login: React.FC = () => {
               Sign in
             </button>
             <div className="flex items-center justify-center text-center gap-1">
-              <p>Don't have an account?</p>   
+              <p>Don't have an account?</p>
               <Link className="underline font-bold" to="/registration">
                 Sign Up here
               </Link>

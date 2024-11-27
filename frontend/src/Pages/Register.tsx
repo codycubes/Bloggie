@@ -5,6 +5,7 @@ import { useRegisterMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { SquareLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
+
 import { RootState } from '../store'; 
 
 const Registration: React.FC = () => {
