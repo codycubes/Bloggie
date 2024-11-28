@@ -1,15 +1,18 @@
 import mongoose from "mongoose";
 import Tweet from "../models/tweetModel.js";
 
+
+
 export const getTweet = async (req, res) => {
-	try {
-		const tweets = await Tweet.find({});
-		res.status(200).json({ success: true, data: tweets });
-	} catch (error) {
-		console.log("error in fetching tweets:", error.message);
-		res.status(500).json({ success: false, message: "Server Error" });
-	}
+  try {
+    const tweets = await Tweet.find({}).populate('userId', 'name'); // populate username from userId
+    res.status(200).json({ success: true, data: tweets });
+  } catch (error) {
+    console.log("error in fetching tweets:", error.message);
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
 };
+
 
 export const createTweet = async (req, res) => {
 	const tweet = req.body; 

@@ -29,7 +29,7 @@ export const useTweetStore = create<TweetStore>((set) => ({
     ) {
       return { success: false, message: "Please fill in all fields." };
     }
-    const res = await fetch("/api/tweets", {
+    const res = await fetch("/api/tweets/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

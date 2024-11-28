@@ -10,6 +10,7 @@ import PrivateRoute from './Components/PrivateRoute';
 import AdminRoute from './Components/AdminRoute';
 import AdminPage from './Pages/AdminPage';
 import { Home } from './Pages/Homepage';
+import { Profile } from './Pages/Profile';
 
 const App: React.FC = () => {
   return (
@@ -20,8 +21,9 @@ const App: React.FC = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
+        <Route path='/profile' element={<Profile />} />
         <Route
-          path="/profile"
+          path="/profileedit"
           element={
             <PrivateRoute>
               <ProfileEdit />
