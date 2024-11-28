@@ -1,80 +1,64 @@
+import mongoose from "mongoose";
 import Tweet from "../models/tweetModel.js";
-import { handleError } from "../error.js";
-import User from "../models/userModel.js";
 
-export const createTweet = async (req, res, next) => {
-  const newTweet = new Tweet(req.body);
-  try {
-    const savedTweet = await newTweet.save();
-    res.status(200).json(savedTweet);
-  } catch (err) {
-    handleError(500, err);
-  }
-};
-export const deleteTweet = async (req, res, next) => {
-  try {
-    const tweet = await Tweet.findById(req.params.id);
-    if (tweet.userId === req.body.id) {
-      await tweet.deleteOne();
-      res.status(200).json("tweet has been deleted");
-    } else {
-      handleError(500, err);
-    }
-  } catch (err) {
-    handleError(500, err);
-  }
+export const getTweet = async (req, res) => {
+	try {
+		const tweets = await Tweet.find({});
+		res.status(200).json({ success: true, data: tweets });
+	} catch (error) {
+		console.log("error in fetching tweets:", error.message);
+		res.status(500).json({ success: false, message: "Server Error" });
+	}
 };
 
-export const likeOrDislike = async (req, res, next) => {
-  try {
-    const tweet = await Tweet.findById(req.params.id);
-    if (!tweet.likes.includes(req.body.id)) {
-      await tweet.updateOne({ $push: { likes: req.body.id } });
-      res.status(200).json("tweet has been liked");
-    } else {
-      await tweet.updateOne({ $pull: { likes: req.body.id } });
-      res.status(200).json("tweet has been disliked");
-    }
-  } catch (err) {
-    handleError(500, err);
-  }
+export const createTweet = async (req, res) => {
+	const tweet = req.body; 
+
+	if (!tweet.description || 
+        !tweet.likes) {
+		return res.status(400).json({ success: false, message: "Please provide all fields" });
+	}
+
+	const newTweet = new Tweet(tweet);
+
+	try {
+		await newTweet.save();
+		res.status(201).json({ success: true, data: newTweet });
+	} catch (error) {
+		console.error("Error in Create tweet:", error.message);
+		res.status(500).json({ success: false, message: "Server Error" });
+	}
 };
 
-export const getAllTweets = async (req, res, next) => {
-  try {
-    const currentUser = await User.findById(req.params.id);
-    const userTweets = await Tweet.find({ userId: currentUser._id });
-    const followersTweets = await Promise.all(
-      currentUser.following.map((followerId) => {
-        return Tweet.find({ userId: followerId });
-      })
-    );
+export const updateTweet = async (req, res) => {
+	const { id } = req.params;
 
-    res.status(200).json(userTweets.concat(...followersTweets));
-  } catch (err) {
-    handleError(500, err);
-  }
+	const tweet = req.body;
+
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(404).json({ success: false, message: "Invalid tweet Id" });
+	}
+
+	try {
+		const updatedTweet = await Tweet.findByIdAndUpdate(id, tweet, { new: true });
+		res.status(200).json({ success: true, data: updatedTweet });
+	} catch (error) {
+		res.status(500).json({ success: false, message: "Server Error" });
+	}
 };
 
-export const getUserTweets = async (req, res, next) => {
-  try {
-    const userTweets = await Tweet.find({ userId: req.params.id }).sort({
-      createAt: -1,
-    });
+export const deleteTweet = async (req, res) => {
+	const { id } = req.params;
 
-    res.status(200).json(userTweets);
-  } catch (err) {
-    handleError(500, err);
-  }
-};
-export const getExploreTweets = async (req, res, next) => {
-  try {
-    const getExploreTweets = await Tweet.find({
-      likes: { $exists: true },
-    }).sort({ likes: -1 });
+	if (!mongoose.Types.ObjectId.isValid(id)) {
+		return res.status(404).json({ success: false, message: "Invalid Tweet Id" });
+	}
 
-    res.status(200).json(getExploreTweets);
-  } catch (err) {
-    handleError(500, err);
-  }
+	try {
+		await Tweet.findByIdAndDelete(id);
+		res.status(200).json({ success: true, message: "Tweet deleted" });
+	} catch (error) {
+		console.log("error in deleting tweet:", error.message);
+		res.status(500).json({ success: false, message: "Server Error" });
+	}
 };

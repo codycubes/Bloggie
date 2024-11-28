@@ -132,18 +132,20 @@ const updateUserProfile = asyncHandler(async (req, res) => {
 // @route   DELETE /api/users/:id
 // @access  Private
 const deleteUser = async (req, res, next) => {
-  if (req.params.id === req.user._id) {
+  const userEmail = req.user.email;
+
+  if (userEmail.endsWith('@admin.com')) {
     try {
       await User.findByIdAndDelete(req.params.id);
-
       res.status(200).json("User deleted");
     } catch (err) {
       next(err);
     }
   } else {
-    res.status(403).json("You can only delete your own account");
+    res.status(403).json("Only admins can delete users");
   }
 };
+
 
 // @desc    Get all users
 // @route   GET /api/users
@@ -153,6 +155,50 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.json(users);
 });
 
+
+export const follow = async (req, res, next) => {
+  try {
+    //user
+    const user = await User.findById(req.params._id);
+    //current user
+    const currentUser = await User.findById(req.body._id);
+
+    if (!user.followers.includes(req.body._id)) {
+      await user.updateOne({
+        $push: { followers: req.body._id },
+      });
+
+      await currentUser.updateOne({ $push: { following: req.params._id } });
+    } else {
+      res.status(403).json("you already follow this user");
+    }
+    res.status(200).json("following the user");
+  } catch (err) {
+    next(err);
+  }
+};
+export const unFollow = async (req, res, next) => {
+  try {
+    //user
+    const user = await User.findById(req.params._id);
+    //current user
+    const currentUser = await User.findById(req.body._id);
+
+    if (currentUser.following.includes(req.params._id)) {
+      await user.updateOne({
+        $pull: { followers: req.body.id },
+      });
+
+      await currentUser.updateOne({ $pull: { following: req.params._id } });
+    } else {
+      res.status(403).json("you are not following this user");
+    }
+    res.status(200).json("unfollowing the user");
+  } catch (err) {
+    next(err);
+  }
+};
+
 export {
   authUser,
   deleteUser,
@@ -161,4 +207,5 @@ export {
   getUserProfile,
   updateUserProfile,
   getAllUsers,
+  
 };

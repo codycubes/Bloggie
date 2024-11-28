@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation } from '../slices/usersApiSlice';
+import { useAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation, useRegisterMutation } from '../slices/usersApiSlice';
 
 interface User {
   _id: string;
@@ -12,6 +12,29 @@ const AdminPage: React.FC = () => {
   const { data: users = [], error, isLoading } = useAllUsersQuery();
   const [updateUser] = useUpdateUserMutation();
   const [deleteUser] = useDeleteUserMutation();
+  const [register] = useRegisterMutation();
+
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserConfirmPassword, setNewUserConfirmPassword] = useState('');
+
+  const handleAddUser = async () => {
+    if (newUserPassword !== newUserConfirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      await register({ name: newUserName, email: newUserEmail, password: newUserPassword }).unwrap();
+      alert('User added successfully');
+      setShowAddUserModal(false);
+    } catch (err) {
+      console.error('Failed to add user', err);
+      alert('Failed to add user');
+    }
+  };
 
   const handleUpdate = async (user: User) => {
     const updatedName = prompt('Enter new name:', user.name);
@@ -44,6 +67,7 @@ const AdminPage: React.FC = () => {
         return (
           <div className="bg-white p-4 rounded shadow">
             <h2 className="text-xl font-bold mb-4">All Users</h2>
+            {/* <button onClick={() => setShowAddUserModal(true)} className="bg-green-500 text-white px-3 py-1 rounded mb-4">Add User</button> */}
             {isLoading ? (
               <p>Loading...</p>
             ) : error ? (
@@ -109,7 +133,8 @@ const AdminPage: React.FC = () => {
               <p className="text-gray-600">@Admin</p>
             </div>
           </div>
-          <button className="ml-auto bg-blue-500 px-4 py-2 rounded">Edit profile</button>
+          <button onClick={() => setShowAddUserModal(true)} 
+          className="ml-auto bg-blue-500 px-4 py-2 rounded">Add User</button>
         </div>
         <div className="mt-6">
           <ul className="flex space-x-4 border-b">
@@ -131,6 +156,57 @@ const AdminPage: React.FC = () => {
           </div>
         </div>
       </div>
+      {showAddUserModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white text-black p-6 rounded shadow-lg">
+            <h2 className="text-xl font-bold mb-4">Add New User</h2>
+            <div>
+              <label htmlFor="newUserName" className="block text-sm font-bold">Name</label>
+              <input
+                id="newUserName"
+                type="text"
+                value={newUserName}
+                onChange={(e) => setNewUserName(e.target.value)}
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="newUserEmail" className="block text-sm font-bold">Email</label>
+              <input
+                id="newUserEmail"
+                type="email"
+                value={newUserEmail}
+                onChange={(e) => setNewUserEmail(e.target.value)}
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="newUserPassword" className="block text-sm font-bold">Password</label>
+              <input
+                id="newUserPassword"
+                type="password"
+                value={newUserPassword}
+                onChange={(e) => setNewUserPassword(e.target.value)}
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+            <div className="mt-4">
+              <label htmlFor="newUserConfirmPassword" className="block text-sm font-bold">Confirm Password</label>
+              <input
+                id="newUserConfirmPassword"
+                type="password"
+                value={newUserConfirmPassword}
+                onChange={(e) => setNewUserConfirmPassword(e.target.value)}
+                className="w-full p-2 border rounded mt-1"
+              />
+            </div>
+            <div className="mt-4 flex justify-end space-x-2">
+              <button onClick={() => setShowAddUserModal(false)} className="px-4 py-2 bg-gray-500 text-white rounded">Cancel</button>
+              <button onClick={handleAddUser} className="px-4 py-2 bg-green-500 text-white rounded">Add</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
