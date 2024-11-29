@@ -36,6 +36,7 @@ export const useTweetStore = create<TweetStore>((set) => ({
       },
       body: JSON.stringify(newTweet),
     });
+    console.log("🚀 ~ createTweet: ~ res:", res)
     const data = await res.json();
     set((state) => ({ tweets: [...state.tweets, data.data] }));
     return { success: true, message: "tweet created successfully" };

@@ -1,11 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch, TypedUseSelectorHook } from "react-redux";
 import { RootState } from "../store";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 
+function capitalizeFirstLetter(string: string): string {
+  if (!string) return string;
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 const Navbar: React.FC = () => {
+  const location = useLocation();
+  const pageName = location.pathname.split('/')[1] || 'home';
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false);
@@ -13,6 +20,10 @@ const Navbar: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+
+  const pageTitle = capitalizeFirstLetter(pageName);
+  console.log("🚀 ~ pageTitle:", pageTitle)
 
   const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
   const { userInfo } = useTypedSelector((state) => state.auth);
@@ -60,11 +71,11 @@ const Navbar: React.FC = () => {
 
   return (
     <nav
-      className={`relative top-0 left-0 w-full z-50 flex justify-between items-center py-5 px-6 bg-transparent text-white transition-transform duration-300 ${
+      className={`relative top-0 left-0 w-full z-50 flex justify-between items-center py-5 px-6 bg-transparent text-black transition-transform duration-300 ${
         showNavbar ? "transform translate-y-0" : "transform -translate-y-full"
       }`}
     >
-      <div className="text-3xl font-black">
+      <div className="text-3xl font-black text-black">
         <Link to="/">Logo</Link>
       </div>
 
@@ -72,7 +83,7 @@ const Navbar: React.FC = () => {
       <div className="md:hidden">
         <button
           onClick={() => setIsHamburgerOpen(true)}
-          className="focus:outline-none text-white"
+          className="focus:outline-none text-black"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -118,7 +129,7 @@ const Navbar: React.FC = () => {
               </svg>
             </button>
             {isDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-48 bg-white text-black rounded-md shadow-lg">
+              <div className="absolute right-0 top-full mt-2 w-48 bg-black text-white rounded-md shadow-lg">
                 <Link
                   to="/profile"
                   className="block px-4 py-2 text-sm hover:bg-gray-100"
@@ -137,14 +148,14 @@ const Navbar: React.FC = () => {
           </div>
         ) : (
           <>
-            <Link to="/registration" className="font-semibold">
+            {/* <Link to="/registration" className="font-semibold">
               Sign up
             </Link>
             <Link to="/login">
               <button className="border-2 uppercase text-lg py-2 px-5 border-white rounded-full hover:bg-red-600 hover:text-white transition">
                 Log In
               </button>
-            </Link>
+            </Link> */}
           </>
         )}
       </div>

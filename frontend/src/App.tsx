@@ -14,7 +14,7 @@ import { Home } from './Pages/Homepage';
 
 const App: React.FC = () => {
   return (
-    <div className="bg-black text-white px-10 w-full h-full">
+    <div className='md:w-8/12 mx-auto'>
       <Navbar />
       <ToastContainer />
       <Routes>
