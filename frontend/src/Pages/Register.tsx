@@ -5,8 +5,8 @@ import { useRegisterMutation } from '../slices/usersApiSlice';
 import { setCredentials } from '../slices/authSlice';
 import { SquareLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
-
-import { RootState } from '../store'; 
+import signup from '../images/Sign up-pana.png';
+import { RootState } from '../store';
 
 const Registration: React.FC = () => {
   const [name, setName] = useState<string>('');
@@ -44,77 +44,58 @@ const Registration: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center font-raleway justify-center min-h-screen">
-      <div className="w-full max-w-md p-8 space-y-6 rounded-lg shadow-lg">
-        <h2 className="text-7xl my-10  font-black text-center">Register</h2>
-        <form className="space-y-6" onSubmit={handleRegister}>
-          <div>
-            <label htmlFor="name" className="block text-sm font-bold">Full Names</label>
+    <div className='container mx-auto px-4'>
+      <h1 className='text-4xl text-center pt-5'>Register</h1>
+      <div className='grid grid-cols-1 md:grid-cols-2 h-11/12 space-x-10'>
+        <div>
+          <img src={signup} alt='signup' className='object-cover w-full' />
+        </div>
+        <div className='flex items-center justify-center'>
+          <form className='w-full max-w-md' onSubmit={handleRegister}>
             <input
-              id="name"
-              name="name"
-              type="text"
-              required
+              type='text'
+              placeholder='Name'
+              className='border border-gray-300 p-2 w-full my-4'
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-transparent w-full px-3 text-white py-2 mt-1 border rounded-md shadow-sm sm:text-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="email" className="block text-sm font-bold">Email address</label>
-            <input
-              id="email"
-              name="email"
-              type="email"
               required
+            />
+            <input
+              type='email'
+              placeholder='Email'
+              className='border border-gray-300 p-2 w-full my-4'
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="bg-transparent w-full px-3 text-white py-2 mt-1 border rounded-md shadow-sm sm:text-sm"
-            />
-          </div>
-          
-          <div>
-            <label htmlFor="password" className="block text-sm font-bold">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
               required
+            />
+            <input
+              type='password'
+              placeholder='Password'
+              className='border border-gray-300 p-2 w-full my-4'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-transparent w-full px-3 text-white py-2 mt-1 border rounded-md shadow-sm sm:text-sm"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="confirm-password" className="block text-sm font-bold">Confirm Password</label>
-            <input
-              id="confirm-password"
-              name="confirm-password"
-              type="password"
               required
+            />
+            <input
+              type='password'
+              placeholder='Confirm Password'
+              className='border border-gray-300 p-2 w-full my-4'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className="bg-transparent w-full px-3 text-white py-2 mt-1 border rounded-md shadow-sm sm:text-sm"
+              required
             />
-          </div>
-
-          <div>
-
             {isLoading && <SquareLoader />}
-            <button
-              type="submit"
-              className="flex justify-center w-full px-4 mb-8 py-2 font-bold text-white bg-red-700 border border-transparent rounded-full shadow-sm hover:scale-110 focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
+            <button type='submit' className='bg-blue-500 text-white p-2 rounded-md w-full my-5'>
               Register
             </button>
-            <div className='justify-center items-center text-center'>
-            <p>Already have an account? <Link to="/login" className='underline font-bold'>Login</Link></p>
-            </div>
-           
-          </div>
-        </form>
+            <p className='text-center'>
+              Already registered?{' '}
+              <Link to='/signin'>
+                <span className='text-blue-700 underline'>Sign in here</span>
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   );
