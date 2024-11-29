@@ -58,7 +58,7 @@ export const MainTweets: React.FC = () => {
           Post
         </button>
       </form>
-      <AllTweets />
+      <AllTweets LoggedUser={userInfo}/>
     </div>
   );
 };

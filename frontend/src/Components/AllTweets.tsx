@@ -8,6 +8,14 @@ interface CardProps {
   name: string;
 }
 
+interface AllTweetsProps {
+  LoggedUser: {
+    _id: string;
+    name: string;
+    email: string;
+  };
+}
+
 const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
   const [hover, setHover] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -90,7 +98,8 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
   );
 };
 
-const AllTweets: React.FC = () => {
+const AllTweets: React.FC<AllTweetsProps> = ({ LoggedUser }) => {
+  console.log("🚀 ~ LoggedUser:", LoggedUser)
   const { fetchTweets, tweets } = useTweetStore();
 
   useEffect(() => {
