@@ -49,7 +49,7 @@ export const MainTweets: React.FC = () => {
       <p className="font-bold pl-2 my-2">Username</p>
       <form className="border-b-2 pb-6" onSubmit={handleAddTweet}>
         <textarea
-          className="bg-slate-200 w-full p-2 border border-slate-300 rounded-lg"
+          className="text-black w-full p-2 border border-slate-300 rounded-lg"
           placeholder="What’s happening?"
           maxLength={280}
           onChange={(e) => setNewTweet({ ...newTweet, description: e.target.value })}

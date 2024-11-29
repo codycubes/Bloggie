@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation, useRegisterMutation } from '../slices/usersApiSlice';
+import AllTweets from '../Components/AllTweets';
 
 interface User {
   _id: string;
@@ -110,7 +111,7 @@ const AdminPage: React.FC = () => {
       case 'AllPosts':
         return (
           <div className="bg-white p-4 rounded shadow">
-            <p>This is the All Posts tab content.</p>
+            <AllTweets />
           </div>
         );
       default:

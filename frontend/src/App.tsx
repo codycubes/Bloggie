@@ -1,16 +1,16 @@
-import { Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
 import Login from './Pages/Login';
 import Registration from './Pages/Register';
 import Navbar from './Components/Navbar';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-// import Homepage from './Pages/Homepage';
-import ProfileEdit from './Pages/ProfileEdit';
-import PrivateRoute from './Components/PrivateRoute';
-import AdminRoute from './Components/AdminRoute';
-import AdminPage from './Pages/AdminPage';
+// import ProfileEdit from './Pages/ProfileEdit';
+// import PrivateRoute from './Components/PrivateRoute';
+// import AdminRoute from './Components/AdminRoute';
+// import AdminPage from './Pages/AdminPage';
 import { Home } from './Pages/Homepage';
-import { Profile } from './Pages/Profile';
+// import { Profile } from './Pages/Profile';
 
 const App: React.FC = () => {
   return (
@@ -18,27 +18,9 @@ const App: React.FC = () => {
       <Navbar />
       <ToastContainer />
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/registration" element={<Registration />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route
-          path="/profileedit"
-          element={
-            <PrivateRoute>
-              <ProfileEdit />
-            </PrivateRoute>
-          }
-        />
-        {/* Admin Routes */}
-        <Route
-          path="/admin"
-          element={
-            // <AdminRoute>
-              <AdminPage />
-            // </AdminRoute>
-          }
-        />
+        <Route path="/*" element={<Home />} />
       </Routes>
     </div>
   );
