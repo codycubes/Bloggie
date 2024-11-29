@@ -7,10 +7,9 @@ import {
   getUserProfile,
   updateUserProfile,
   getAllUsers,
-  follow,
-  unFollow
+  
 } from '../controllers/userController.js';
-import { protect } from '../middleware/authMiddleware.js';
+import { protect, authorizeRoles } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -19,7 +18,9 @@ router.post('/auth', authUser);
 router.post('/logout', logoutUser);
 router.route('/:id').put(protect, updateUserProfile).delete(protect, deleteUser);
 router.route('/profile').get(protect, getUserProfile).put(protect, updateUserProfile);
-router.route('/allusers').get(protect, getAllUsers); // Change to GET and add protect middleware
+router.route('/allusers').get(protect, 
+  // authorizeRoles('admin'), 
+  getAllUsers); // Change to GET and add protect middleware
 // router.put("/follow/:id", follow);
 // router.put("/unfollow/:id", unFollow);
 
