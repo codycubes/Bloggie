@@ -90,7 +90,7 @@ const Registration: React.FC = () => {
             </button>
             <p className='text-center'>
               Already registered?{' '}
-              <Link to='/signin'>
+              <Link to='/login'>
                 <span className='text-blue-700 underline'>Sign in here</span>
               </Link>
             </p>
