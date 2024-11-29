@@ -6,13 +6,18 @@ import { setCredentials } from '../slices/authSlice';
 import { SquareLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import signup from '../images/Sign up-pana.png';
+import spaceImage from '../images/space.jpg';
 import { RootState } from '../store';
+import Swal from 'sweetalert2';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Registration: React.FC = () => {
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -31,71 +36,92 @@ const Registration: React.FC = () => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Passwords do not match',
+      });
     } else {
       try {
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
         navigate('/');
       } catch (err: any) {
-        toast.error(err?.data?.message || err.error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: err?.data?.message || err.error,
+        });
       }
     }
   };
 
   return (
-    <div className='container mx-auto px-4'>
-      <h1 className='text-4xl text-center pt-5'>Register</h1>
-      <div className='grid grid-cols-1 md:grid-cols-2 h-11/12 space-x-10'>
-        <div>
-          <img src={signup} alt='signup' className='object-cover w-full' />
-        </div>
-        <div className='flex items-center justify-center'>
-          <form className='w-full max-w-md' onSubmit={handleRegister}>
+    <div className='flex h-screen'>
+      <div className='w-1/4 bg-cover' style={{ backgroundImage: `url(${spaceImage})` }}></div>
+      <div className='w-3/4 bg-white flex items-center justify-center relative'>
+        <div className='absolute left-0 top-0 w-1/4 h-full bg-cover' style={{ backgroundImage: `url(${spaceImage})`, zIndex: -1 }}></div>
+        <form className='w-full max-w-md p-10 bg-white z-10' onSubmit={handleRegister}>
+          <h1 className='text-4xl text-center mb-5 font-bold'>Register</h1>
+          <input
+            type='text'
+            placeholder='Name'
+            className='border border-gray-300 p-3 w-full my-4'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+          <input
+            type='email'
+            placeholder='Email'
+            className='border border-gray-300 p-3 w-full my-4'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className='relative w-full my-4'>
             <input
-              type='text'
-              placeholder='Name'
-              className='border border-gray-300 p-2 w-full my-4'
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-            />
-            <input
-              type='email'
-              placeholder='Email'
-              className='border border-gray-300 p-2 w-full my-4'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               placeholder='Password'
-              className='border border-gray-300 p-2 w-full my-4'
+              className='border border-gray-300 p-3 w-full'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            <div
+              className='absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer'
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
+          <div className='relative w-full my-4'>
             <input
-              type='password'
+              type={showConfirmPassword ? 'text' : 'password'}
               placeholder='Confirm Password'
-              className='border border-gray-300 p-2 w-full my-4'
+              className='border border-gray-300 p-3 w-full'
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
-            {isLoading && <SquareLoader />}
-            <button type='submit' className='bg-blue-500 text-white p-2 rounded-md w-full my-5'>
-              Register
-            </button>
-            <p className='text-center'>
-              Already registered?{' '}
-              <Link to='/login'>
-                <span className='text-blue-700 underline'>Sign in here</span>
-              </Link>
-            </p>
-          </form>
-        </div>
+            <div
+              className='absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer'
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+            >
+              {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
+          {isLoading && <SquareLoader />}
+          <button type='submit' className='bg-black text-white p-3 rounded-lg w-full my-5'>
+            Register
+          </button>
+          <p className='text-center'>
+            Already registered?{' '}
+            <Link to='/login'>
+              <span className='text-blue-700 underline'>Sign in here</span>
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

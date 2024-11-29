@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLoginMutation } from '../slices/usersApiSlice';
@@ -6,6 +6,10 @@ import { setCredentials } from '../slices/authSlice';
 import { toast } from 'react-toastify';
 import { RootState, AppDispatch } from '../store';
 import signin from '../images/Sign in-amico.png';
+import spaceImage from '../images/space.jpg';
+import Swal from 'sweetalert2';
+import { ClipLoader } from 'react-spinners';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface LoginResponse {
   id: string;
@@ -17,6 +21,7 @@ interface LoginResponse {
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -39,47 +44,56 @@ const Login: React.FC = () => {
         navigate('/');
       }
     } catch (err: any) {
-      toast.error(err?.data?.message || err.error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: err?.data?.message || err.error,
+      });
     }
   };
 
   return (
-    <div className='container mx-auto px-4'>
-      <h1 className='text-4xl text-center pt-5'>Sign In</h1>
-      <div className='grid grid-cols-1 md:grid-cols-2 h-11/12 space-x-10'>
-        <div>
-          <img src={signin} alt='signin' className='object-cover w-full' />
-        </div>
-        <div className='flex items-center justify-center'>
-          <form className='w-full max-w-md' onSubmit={handleLogin}>
+    <div className='flex h-screen'>
+      <div className='w-1/4 bg-cover' style={{ backgroundImage: `url(${spaceImage})` }}></div>
+      <div className='w-3/4 bg-white flex items-center justify-center relative'>
+        <div className='absolute left-0 top-0 w-1/4 h-full bg-cover' style={{ backgroundImage: `url(${spaceImage})`, zIndex: -1 }}></div>
+        <form className='w-full max-w-md p-10 bg-white z-10' onSubmit={handleLogin}>
+          <h1 className='text-4xl text-center mb-5 font-bold'>Sign In</h1>
+          <input
+            type='email'
+            placeholder='Email'
+            className='border border-gray-300 p-3 w-full my-4'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <div className='relative w-full my-4'>
             <input
-              type='email'
-              placeholder='Email'
-              className='border border-gray-300 p-2 w-full my-4'
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-            <input
-              type='password'
+              type={showPassword ? 'text' : 'password'}
               placeholder='Password'
-              className='border border-gray-300 p-2 w-full my-4'
+              className='border border-gray-300 p-3 w-full'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {isLoading && <h2>Loading</h2>}
-            <button type='submit' className='bg-blue-500 text-white p-2 rounded-md w-full my-5'>
-              Sign In
-            </button>
-            <p className='text-center'>
-              Don`t have an account?{' '}
-              <Link to='/registration'>
-                <span className='text-blue-700 underline'>Register here</span>
-              </Link>
-            </p>
-          </form>
-        </div>
+            <div
+              className='absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer'
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+          </div>
+          {isLoading && <ClipLoader color={"#123abc"} loading={isLoading} size={50} />}
+          <button type='submit' className='bg-black text-white p-3 rounded-lg w-full my-5'>
+            Sign In
+          </button>
+          <p className='text-center'>
+            Don`t have an account?{' '}
+            <Link to='/registration'>
+              <span className='text-blue-700 underline'>Register here</span>
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );
