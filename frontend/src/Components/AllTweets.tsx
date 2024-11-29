@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTweetStore } from '../store/tweet';
+import { ThumbUp } from '@mui/icons-material';
 
 interface CardProps {
   _id: string;
@@ -36,7 +37,7 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
 
   return (
     <div 
-      className="rounded-lg shadow-md text-start overflow-hidden h-auto p-4 hover:bg-zinc-900 relative"
+      className="rounded-3xl shadow-md text-start border  h-full p-4 hover:bg-zinc-900 relative"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -47,13 +48,13 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
               type="text" 
               value={newDescription} 
               onChange={(e) => setNewDescription(e.target.value)} 
-              className="w-full bg-transparent p-2 rounded"
+              className="w-full bg-white text-black p-2 rounded"
             />
             <input 
               type="text" 
               value={newLikes} 
               onChange={(e) => setNewLikes(e.target.value)} 
-              className="w-full bg-transparent border-black p-2 rounded mt-2"
+              className="w-full g-white text-black p-2 rounded mt-2"
             />
             <button 
               className="bg-blue-500 text-white px-2 py-1 rounded mt-2" 
@@ -63,11 +64,15 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
             </button>
           </>
         ) : (
-          <>
-            <h2>@{name}</h2>
-            <h2 className="font-bold text-lg">{description}</h2>
+          <div className='flex flex-col gap-4'>
+            <h2 className='font-bold font-oswald text-2xl text-green-500'>@{name}</h2>
+            <h2 className=" text-base">{description}</h2>
+            <div className='flex gap-2 hover:cursor-pointer '>
+            <ThumbUp className='hover:scale-150 hover:text-green-500'/>
             <p>{likes}</p>
-          </>
+            </div>
+            
+          </div>
         )}
       </div>
       {hover && !isEditing && (
@@ -98,7 +103,7 @@ const AllTweets: React.FC = () => {
   }, [fetchTweets]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full mt-6 px-1 flex flex-col gap-5">
       {tweets.map((tweet) => (
         <Card 
           key={tweet._id} 

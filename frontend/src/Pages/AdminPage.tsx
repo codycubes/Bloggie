@@ -66,7 +66,7 @@ const AdminPage: React.FC = () => {
     switch (activeTab) {
       case 'AllUsers':
         return (
-          <div className="bg-white p-4 rounded shadow">
+          <div className=" p-4 rounded shadow">
             <h2 className="text-xl font-bold mb-4">All Users</h2>
             {/* <button onClick={() => setShowAddUserModal(true)} className="bg-green-500 text-white px-3 py-1 rounded mb-4">Add User</button> */}
             {isLoading ? (
@@ -110,7 +110,7 @@ const AdminPage: React.FC = () => {
         );
       case 'AllPosts':
         return (
-          <div className="bg-white p-4 rounded shadow">
+          <div className=" p-4 rounded shadow">
             <AllTweets />
           </div>
         );
@@ -120,12 +120,12 @@ const AdminPage: React.FC = () => {
   };
 
   return (
-    <div className="h-screen bg-gray-100">
-      <header className="bg-black h-[300px] flex items-center justify-center">
+    <div className="h-full 0">
+      <header className=" h-[300px] flex items-center justify-center">
         <img src="path-to-header-image.jpg" alt="Header" className="w-full h-full object-cover" />
       </header>
 
-      <div className="max-w-4xl mx-auto p-4 text-black">
+      <div className="max-w-4xl mx-auto p-4 text-white">
         <div className="flex">
           <div className="flex items-center space-x-4">
             <img src="vite.svg" alt="Profile" className="w-24 h-24 rounded-full border-4 border-white -mt-12" />

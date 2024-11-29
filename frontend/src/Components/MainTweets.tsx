@@ -45,16 +45,16 @@ export const MainTweets: React.FC = () => {
   };
 
   return (
-    <div>
-      <p className="font-bold pl-2 my-2">Username</p>
-      <form className="border-b-2 pb-6" onSubmit={handleAddTweet}>
+    <div className='min-h-auto mt-5'>
+      <p className="font-bold px-4 mb-10 text-4xl">Home</p>
+      <form className="border-b-2 pb-8 px-4" onSubmit={handleAddTweet}>
         <textarea
-          className="text-black w-full p-2 border border-slate-300 rounded-lg"
+          className="text-black bg-white w-full h-24 p-2 border-2 rounded-lg"
           placeholder="What’s happening?"
           maxLength={280}
           onChange={(e) => setNewTweet({ ...newTweet, description: e.target.value })}
         />
-        <button type="submit" className="bg-blue-500 text-white px-4 py-1 rounded-full ml-auto mt-2">
+        <button type="submit" className="bg-green-500 text-white px-4 py-1 rounded-full ml-auto mt-2">
           Post
         </button>
       </form>
