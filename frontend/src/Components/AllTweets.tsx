@@ -6,7 +6,7 @@ interface CardProps {
   _id: string;
   description: string;
   likes: string;
-  name: string;
+  name?: string; // Make `name` optional in case it's undefined
 }
 
 const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
@@ -37,7 +37,7 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
 
   return (
     <div 
-      className="rounded-3xl shadow-md text-start border  h-full p-4 hover:bg-zinc-900 relative"
+      className="rounded-3xl shadow-md text-start border h-full p-4 hover:bg-zinc-900 relative"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
     >
@@ -54,7 +54,7 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
               type="text" 
               value={newLikes} 
               onChange={(e) => setNewLikes(e.target.value)} 
-              className="w-full g-white text-black p-2 rounded mt-2"
+              className="w-full bg-white text-black p-2 rounded mt-2"
             />
             <button 
               className="bg-blue-500 text-white px-2 py-1 rounded mt-2" 
@@ -64,14 +64,13 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
             </button>
           </>
         ) : (
-          <div className='flex flex-col gap-4'>
-            <h2 className='font-bold font-oswald text-2xl text-green-500'>@{name}</h2>
-            <h2 className=" text-base">{description}</h2>
-            <div className='flex gap-2 hover:cursor-pointer '>
-            <ThumbUp className='hover:scale-150 hover:text-green-500'/>
-            <p>{likes}</p>
+          <div className="flex flex-col gap-4">
+            <h2 className="font-bold font-oswald text-2xl text-green-500">@{name}</h2>
+            <h2 className="text-base">{description}</h2>
+            <div className="flex gap-2 hover:cursor-pointer">
+              <ThumbUp className="hover:scale-150 hover:text-green-500"/>
+              <p>{likes}</p>
             </div>
-            
           </div>
         )}
       </div>
@@ -104,13 +103,13 @@ const AllTweets: React.FC = () => {
 
   return (
     <div className="w-full h-full mt-6 px-1 flex flex-col gap-5">
-      {tweets.map((tweet) => (
+      {tweets?.map((tweet) => (
         <Card 
           key={tweet._id} 
           _id={tweet._id} 
           description={tweet.description} 
           likes={tweet.likes} 
-          name={tweet.userId.name} 
+          name={tweet.userId?.name} // Use optional chaining here
         />
       ))}
     </div>
