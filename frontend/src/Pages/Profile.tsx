@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useUpdateUserMutation, useDeleteUserMutation, useRegisterMutation } from '../slices/usersApiSlice';
 import AllTweets from '../Components/AllTweets';
 import { useDispatch, useSelector } from 'react-redux';
+import image from '../images/space.jpg'
+
+
 
 interface User {
   _id: string;
@@ -35,7 +38,7 @@ export const Profile: React.FC = () => {
   return (
     <div className="h-full">
       <header className="bg-gray-400 h-[300px] flex items-center justify-center">
-        <img src="path-to-header-image.jpg" alt="Header" className="w-full h-full object-cover" />
+        <img src={image} alt="Header" className="w-full h-full object-cover" />
       </header>
 
       <div className="max-w-4xl mx-auto p-4 text-white">
@@ -47,7 +50,7 @@ export const Profile: React.FC = () => {
               <p className="text-gray-600">@{userInfo.name}</p>
             </div>
           </div>
-          <button onClick={handleEditProfile} className="ml-auto bg-blue-500 px-4 py-2 rounded">Edit profile</button>
+          <button onClick={handleEditProfile} className="ml-auto bg-green-500 px-4 py-2 rounded">Edit profile</button>
         </div>
 
         <div className='flex flex-col gap-7  border-slate-300 ml-5 mt-7'>

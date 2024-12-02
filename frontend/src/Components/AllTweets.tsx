@@ -77,7 +77,7 @@ const Card: React.FC<CardProps> = ({ _id, description, likes, name }) => {
       {hover && !isEditing && (
         <div className="absolute top-0 right-0 p-2">
           <button 
-            className="bg-blue-500 text-black px-2 py-1 mr-2 rounded" 
+            className="bg-green-500 text-black px-2 py-1 mr-2 rounded" 
             onClick={() => setIsEditing(true)}
           >
             Edit

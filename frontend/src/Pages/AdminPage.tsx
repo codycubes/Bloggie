@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAllUsersQuery, useUpdateUserMutation, useDeleteUserMutation, useRegisterMutation } from '../slices/usersApiSlice';
 import AllTweets from '../Components/AllTweets';
+import image from '../images/space.jpg'
 
 interface User {
   _id: string;
@@ -87,7 +88,7 @@ const AdminPage: React.FC = () => {
                       </div>
                       <div className="flex space-x-2">
                         <button
-                          className="bg-yellow-500 text-white px-3 py-1 rounded"
+                          className="bg-green-500 text-white px-3 py-1 rounded"
                           onClick={() => handleUpdate(user)}
                         >
                           Update
@@ -122,7 +123,7 @@ const AdminPage: React.FC = () => {
   return (
     <div className="h-full 0">
       <header className=" h-[300px] flex items-center justify-center">
-        <img src="path-to-header-image.jpg" alt="Header" className="w-full h-full object-cover" />
+        <img src={image} alt="Header" className="w-full h-full object-cover" />
       </header>
 
       <div className="max-w-4xl mx-auto p-4 text-white">
@@ -135,7 +136,7 @@ const AdminPage: React.FC = () => {
             </div>
           </div>
           <button onClick={() => setShowAddUserModal(true)} 
-          className="ml-auto bg-blue-500 px-4 py-2 rounded">Add User</button>
+          className="ml-auto bg-green-500 px-4 py-2 rounded">Add User</button>
         </div>
         <div className="mt-6">
           <ul className="flex space-x-4 border-b">

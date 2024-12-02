@@ -6,6 +6,7 @@ import { MainTweets } from '../Components/MainTweets';
 import { Profile } from './Profile';
 import ProfileEdit from './ProfileEdit';
 import AdminPage from './AdminPage';
+import PrivateRoute from '../Components/PrivateRoute';
 
 export const Home: React.FC = () => {
   return (
@@ -16,7 +17,11 @@ export const Home: React.FC = () => {
         </div>
         <div className='col-span-2 border-x-2 border-t-slate-800'>
           <Routes>
-            <Route path="/profile" element={<Profile />} />
+            
+            <Route path="/profile" element={<PrivateRoute>
+              <Profile />
+              </PrivateRoute>} />
+            
             {/* <Route path="/profileedit" element={<ProfileEdit />} /> */}
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/tweets" element={<MainTweets />} />
